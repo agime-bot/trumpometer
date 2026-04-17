@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trump-O-Meter Widget</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #141428;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh;
+    }
+    .widget {
+      background: #141428; border: 1px solid #1e1e3a;
+      border-radius: 12px; padding: 1.2rem 1.6rem;
+      text-align: center; width: 220px;
+    }
+    .w-label { font-size: .7rem; color: #7878a0; text-transform: uppercase; letter-spacing: 1px; margin-bottom: .4rem; }
+    .w-score { font-size: 3.2rem; font-weight: 900; line-height: 1; }
+    .w-sub { font-size: .7rem; color: #7878a0; margin-top: .2rem; }
+    .w-mood { display: inline-block; margin-top: .6rem; padding: .2rem .7rem; border-radius: 20px; font-size: .7rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .w-target { font-size: .72rem; color: #7878a0; margin-top: .5rem; }
+    .w-footer { font-size: .6rem; color: #444466; margin-top: .8rem; }
+    .w-footer a { color: #444466; text-decoration: none; }
+  </style>
+</head>
+<body>
+<div class="widget">
+  <div class="w-label">⚡ Trump-O-Meter</div>
+  <div class="w-score" id="w-score">—</div>
+  <div class="w-sub">/ 10 today</div>
+  <div class="w-mood" id="w-mood">—</div>
+  <div class="w-target" id="w-target">—</div>
+  <div class="w-footer"><a href="https://agime-bot.github.io/trumpometer/" target="_blank">trumpometer</a></div>
+</div>
+<script>
+  function moodColor(m) {
+    m=(m||'').toUpperCase();
+    if(['AGGRESSIVE','TRIUMPHANT','ERRATIC'].includes(m)) return '#e74c3c';
+    if(['DEFENSIVE','DISTRACTED'].includes(m)) return '#e67e22';
+    if(['CALCULATED'].includes(m)) return '#00d4ff';
+    return '#7878a0';
+  }
+  function scoreColor(v) {
+    if(v>=8) return '#e74c3c';
+    if(v>=6) return '#e67e22';
+    if(v>=4) return '#f1c40f';
+    return '#2ecc71';
+  }
+  fetch('data/latest.json?t='+Date.now())
+    .then(r=>r.json()).then(d=>{
+      const score=d.data.composite, mood=d.data.overall_mood, mc=moodColor(mood);
+      document.getElementById('w-score').textContent=score.toFixed(1);
+      document.getElementById('w-score').style.color=scoreColor(score);
+      const mb=document.getElementById('w-mood');
+      mb.textContent=mood; mb.style.background=mc+'22'; mb.style.color=mc; mb.style.border='1px solid '+mc+'55';
+      document.getElementById('w-target').textContent=d.data.primary_target;
+    }).catch(()=>{});
+</script>
+</body>
+</html>

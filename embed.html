@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trump-O-Meter — Embed Widget</title>
+  <meta name="description" content="Embed the Trump-O-Meter widget on your website. Free, auto-updating daily score." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <style>
+    :root {
+      --bg: #0d0d1a; --surface: #141428; --border: #1e1e3a;
+      --accent: #00d4ff; --text: #e8e8f0; --muted: #7878a0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; }
+
+    header { text-align: center; padding: 2.5rem 1rem 1rem; border-bottom: 1px solid var(--border); }
+    header h1 { font-size: 2.2rem; letter-spacing: 2px; color: var(--accent); }
+    header p { color: var(--muted); margin-top: .4rem; font-size: .95rem; }
+
+    nav { display: flex; justify-content: center; gap: 2rem; padding: .8rem; border-bottom: 1px solid var(--border); font-size: .9rem; }
+    nav a { color: var(--muted); text-decoration: none; transition: color .2s; }
+    nav a:hover, nav a.active { color: var(--accent); }
+
+    main { max-width: 760px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+
+    .section-title { font-size: 1rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; margin-top: 2rem; }
+
+    /* ── THE ACTUAL EMBEDDABLE WIDGET ── */
+    .widget-wrapper {
+      display: flex; justify-content: center; margin-bottom: 2rem;
+    }
+    #trumpometer-widget {
+      background: #141428;
+      border: 1px solid #1e1e3a;
+      border-radius: 12px;
+      padding: 1.2rem 1.6rem;
+      text-align: center;
+      width: 220px;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+    #trumpometer-widget .w-label {
+      font-size: .7rem; color: #7878a0; text-transform: uppercase; letter-spacing: 1px; margin-bottom: .4rem;
+    }
+    #trumpometer-widget .w-score {
+      font-size: 3.2rem; font-weight: 900; line-height: 1;
+    }
+    #trumpometer-widget .w-sub {
+      font-size: .7rem; color: #7878a0; margin-top: .2rem;
+    }
+    #trumpometer-widget .w-mood {
+      display: inline-block; margin-top: .6rem;
+      padding: .2rem .7rem; border-radius: 20px;
+      font-size: .7rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    }
+    #trumpometer-widget .w-target {
+      font-size: .72rem; color: #7878a0; margin-top: .5rem;
+    }
+    #trumpometer-widget .w-footer {
+      font-size: .6rem; color: #444466; margin-top: .8rem;
+    }
+    #trumpometer-widget .w-footer a { color: #444466; }
+
+    /* ── CODE DISPLAY ── */
+    .code-card {
+      background: #0a0a18;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.2rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+    .code-card pre {
+      font-family: 'Courier New', monospace;
+      font-size: .8rem;
+      color: #a0d4ff;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .copy-btn {
+      position: absolute; top: .8rem; right: .8rem;
+      background: var(--border); border: none;
+      color: var(--muted); font-size: .75rem;
+      padding: .3rem .7rem; border-radius: 6px; cursor: pointer;
+      transition: background .2s;
+    }
+    .copy-btn:hover { background: #2a2a4a; color: var(--text); }
+
+    .ad-slot {
+      background: var(--surface); border: 1px dashed var(--border);
+      border-radius: 8px; padding: 1.5rem; text-align: center;
+      color: var(--muted); font-size: .8rem; margin-bottom: 2rem;
+      min-height: 100px; display: flex; align-items: center; justify-content: center;
+    }
+
+    .instructions {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1.2rem 1.4rem;
+      font-size: .88rem; line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+    .instructions ol { padding-left: 1.2rem; }
+    .instructions li { margin-bottom: .4rem; color: var(--muted); }
+    .instructions li strong { color: var(--text); }
+
+    footer { text-align: center; padding: 2rem 1rem; border-top: 1px solid var(--border); color: var(--muted); font-size: .8rem; }
+    footer a { color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>⚡ TRUMP-O-METER</h1>
+  <p>Embed the daily widget on your site</p>
+</header>
+
+<nav>
+  <a href="index.html">Today</a>
+  <a href="history.html">History</a>
+  <a href="embed.html" class="active">Embed</a>
+</nav>
+
+<main>
+
+  <div class="ad-slot"><!-- AdSense -->Advertisement</div>
+
+  <div class="section-title">Live Preview</div>
+  <div class="widget-wrapper">
+    <div id="trumpometer-widget">
+      <div class="w-label">⚡ Trump-O-Meter</div>
+      <div class="w-score" id="w-score">—</div>
+      <div class="w-sub">/ 10 today</div>
+      <div class="w-mood" id="w-mood">—</div>
+      <div class="w-target" id="w-target">—</div>
+      <div class="w-footer"><a href="https://agime-bot.github.io/trumpometer/" target="_blank">trumpometer.io</a></div>
+    </div>
+  </div>
+
+  <div class="section-title">Option 1 — iframe Embed</div>
+  <div class="code-card">
+    <pre id="iframe-code">&lt;iframe
+  src="https://agime-bot.github.io/trumpometer/widget.html"
+  width="240"
+  height="180"
+  frameborder="0"
+  scrolling="no"
+  style="border-radius:12px"
+&gt;&lt;/iframe&gt;</pre>
+    <button class="copy-btn" onclick="copy('iframe-code', this)">Copy</button>
+  </div>
+
+  <div class="section-title">Option 2 — JavaScript Embed</div>
+  <div class="code-card">
+    <pre id="js-code">&lt;div id="trumpometer-widget"&gt;&lt;/div&gt;
+&lt;script src="https://agime-bot.github.io/trumpometer/widget.js"&gt;&lt;/script&gt;</pre>
+    <button class="copy-btn" onclick="copy('js-code', this)">Copy</button>
+  </div>
+
+  <div class="section-title">Option 3 — JSON Data Feed</div>
+  <div class="code-card">
+    <pre id="json-code">// Latest score
+https://agime-bot.github.io/trumpometer/data/latest.json
+
+// Full history (90 days)
+https://agime-bot.github.io/trumpometer/data/history.json</pre>
+    <button class="copy-btn" onclick="copy('json-code', this)">Copy</button>
+  </div>
+
+  <div class="section-title">How to Use</div>
+  <div class="instructions">
+    <ol>
+      <li><strong>iframe:</strong> Paste Option 1 anywhere in your HTML. Works on any platform that allows iframes (WordPress, Ghost, Squarespace).</li>
+      <li><strong>JavaScript:</strong> Include the script tag and place the div where you want the widget to appear.</li>
+      <li><strong>JSON API:</strong> Fetch the data feed and build your own display. Free. Updated daily at 08:00 UTC. No API key required.</li>
+    </ol>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense bottom -->Advertisement</div>
+
+</main>
+
+<footer>
+  <p>Updated daily at 08:00 UTC &nbsp;·&nbsp; <a href="index.html">Today's score</a> &nbsp;·&nbsp; <a href="history.html">History</a></p>
+</footer>
+
+<script>
+  function moodColor(m) {
+    m = (m||'').toUpperCase();
+    if (['AGGRESSIVE','TRIUMPHANT','ERRATIC'].includes(m)) return '#e74c3c';
+    if (['DEFENSIVE','DISTRACTED'].includes(m)) return '#e67e22';
+    if (['CALCULATED'].includes(m)) return '#00d4ff';
+    return '#7878a0';
+  }
+  function scoreColor(v) {
+    if (v >= 8) return '#e74c3c';
+    if (v >= 6) return '#e67e22';
+    if (v >= 4) return '#f1c40f';
+    return '#2ecc71';
+  }
+
+  async function load() {
+    try {
+      const res = await fetch('data/latest.json?t=' + Date.now());
+      const d = await res.json();
+      const score = d.data.composite;
+      const mood = d.data.overall_mood;
+      const mc = moodColor(mood);
+      document.getElementById('w-score').textContent = score.toFixed(1);
+      document.getElementById('w-score').style.color = scoreColor(score);
+      const mb = document.getElementById('w-mood');
+      mb.textContent = mood;
+      mb.style.background = mc + '22';
+      mb.style.color = mc;
+      mb.style.border = '1px solid ' + mc + '55';
+      document.getElementById('w-target').textContent = d.data.primary_target;
+    } catch(e) {}
+  }
+
+  function copy(id, btn) {
+    const text = document.getElementById(id).textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 1500);
+    });
+  }
+
+  load();
+</script>
+</body>
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trump-O-Meter — Historical Tracker</title>
+  <meta name="description" content="Track Trump's mindset score over time. 90-day history of aggression, erraticism, market risk and more." />
+  <meta property="og:title" content="Trump-O-Meter History" />
+  <meta property="og:description" content="Was Trump more erratic during tariff week or Iran week? 90-day mindset tracker." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #0d0d1a; --surface: #141428; --border: #1e1e3a;
+      --accent: #00d4ff; --text: #e8e8f0; --muted: #7878a0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; }
+
+    header { text-align: center; padding: 2.5rem 1rem 1rem; border-bottom: 1px solid var(--border); }
+    header h1 { font-size: 2.2rem; letter-spacing: 2px; color: var(--accent); }
+    header p { color: var(--muted); margin-top: .4rem; font-size: .95rem; }
+
+    nav { display: flex; justify-content: center; gap: 2rem; padding: .8rem; border-bottom: 1px solid var(--border); font-size: .9rem; }
+    nav a { color: var(--muted); text-decoration: none; transition: color .2s; }
+    nav a:hover, nav a.active { color: var(--accent); }
+
+    main { max-width: 900px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+
+    .section-title { font-size: 1rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; }
+
+    .chart-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;
+    }
+    .chart-card canvas { max-height: 320px; }
+
+    .ad-slot {
+      background: var(--surface); border: 1px dashed var(--border);
+      border-radius: 8px; padding: 1.5rem; text-align: center;
+      color: var(--muted); font-size: .8rem; margin-bottom: 2rem;
+      min-height: 100px; display: flex; align-items: center; justify-content: center;
+    }
+
+    .table-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden; margin-bottom: 2rem;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+    th { background: #0f0f22; padding: .7rem 1rem; text-align: left; color: var(--muted); font-weight: 600; text-transform: uppercase; font-size: .75rem; letter-spacing: 1px; }
+    td { padding: .7rem 1rem; border-top: 1px solid var(--border); }
+    tr:hover td { background: #1a1a30; }
+    .mood-pill {
+      display: inline-block; padding: .15rem .6rem;
+      border-radius: 12px; font-size: .75rem; font-weight: 700;
+    }
+
+    footer { text-align: center; padding: 2rem 1rem; border-top: 1px solid var(--border); color: var(--muted); font-size: .8rem; }
+    footer a { color: var(--muted); }
+
+    .dim-toggle { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1rem; }
+    .dim-btn {
+      padding: .25rem .8rem; border-radius: 20px; border: 1px solid var(--border);
+      background: transparent; color: var(--muted); font-size: .8rem; cursor: pointer;
+      transition: all .2s;
+    }
+    .dim-btn.active { color: var(--bg); font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>⚡ TRUMP-O-METER</h1>
+  <p>90-day mindset history</p>
+</header>
+
+<nav>
+  <a href="index.html">Today</a>
+  <a href="history.html" class="active">History</a>
+  <a href="embed.html">Embed</a>
+</nav>
+
+<main>
+
+  <div class="ad-slot"><!-- AdSense top -->Advertisement</div>
+
+  <div class="section-title">Composite Score — Last 90 Days</div>
+  <div class="chart-card">
+    <canvas id="compositeChart"></canvas>
+  </div>
+
+  <div class="section-title">Dimension Breakdown</div>
+  <div class="dim-toggle" id="dim-toggle"></div>
+  <div class="chart-card">
+    <canvas id="dimChart"></canvas>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense mid -->Advertisement</div>
+
+  <div class="section-title">Daily Log</div>
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Score</th>
+          <th>Mood</th>
+          <th>Primary Target</th>
+          <th>Aggr</th>
+          <th>Errat</th>
+          <th>Mkt</th>
+          <th>Geo</th>
+          <th>Dom</th>
+        </tr>
+      </thead>
+      <tbody id="history-table"></tbody>
+    </table>
+  </div>
+
+</main>
+
+<footer>
+  <p>Updated daily at 08:00 UTC &nbsp;·&nbsp; <a href="index.html">Today's score</a> &nbsp;·&nbsp; <a href="embed.html">Embed widget</a></p>
+</footer>
+
+<script>
+  const DIMS = ["Aggression","Erraticism","Market Risk","Geopolitical Tension","Domestic Heat"];
+  const DIM_COLORS = ["#e74c3c","#e67e22","#f1c40f","#00d4ff","#a29bfe"];
+  const ACTIVE_DIMS = new Set(DIMS);
+
+  function moodColor(m) {
+    m = (m||'').toUpperCase();
+    if (['AGGRESSIVE','TRIUMPHANT','ERRATIC'].includes(m)) return '#e74c3c';
+    if (['DEFENSIVE','DISTRACTED'].includes(m)) return '#e67e22';
+    if (['CALCULATED'].includes(m)) return '#00d4ff';
+    return '#7878a0';
+  }
+
+  let compositeChart, dimChart, historyData = [];
+
+  function buildCompositeChart(data) {
+    const labels = data.map(d => d.date.slice(5)); // MM-DD
+    const values = data.map(d => d.composite);
+    const ctx = document.getElementById('compositeChart').getContext('2d');
+    if (compositeChart) compositeChart.destroy();
+    compositeChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Composite',
+          data: values,
+          borderColor: '#00d4ff',
+          backgroundColor: 'rgba(0,212,255,0.07)',
+          tension: 0.3,
+          fill: true,
+          pointRadius: 3,
+          pointHoverRadius: 6,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ` Score: ${c.parsed.y.toFixed(1)}/10` } } },
+        scales: {
+          x: { ticks: { color: '#7878a0', maxTicksLimit: 14 }, grid: { color: '#1e1e3a' } },
+          y: { min: 0, max: 10, ticks: { color: '#7878a0' }, grid: { color: '#1e1e3a' } }
+        }
+      }
+    });
+  }
+
+  function buildDimChart(data) {
+    const labels = data.map(d => d.date.slice(5));
+    const activeDims = DIMS.filter(d => ACTIVE_DIMS.has(d));
+    const datasets = activeDims.map((dim, i) => ({
+      label: dim,
+      data: data.map(d => (d.scores||{})[dim] || null),
+      borderColor: DIM_COLORS[DIMS.indexOf(dim)],
+      backgroundColor: 'transparent',
+      tension: 0.3,
+      pointRadius: 2,
+      borderWidth: 2,
+    }));
+    const ctx = document.getElementById('dimChart').getContext('2d');
+    if (dimChart) dimChart.destroy();
+    dimChart = new Chart(ctx, {
+      type: 'line',
+      data: { labels, datasets },
+      options: {
+        responsive: true,
+        plugins: { legend: { labels: { color: '#7878a0', boxWidth: 12 } } },
+        scales: {
+          x: { ticks: { color: '#7878a0', maxTicksLimit: 14 }, grid: { color: '#1e1e3a' } },
+          y: { min: 0, max: 10, ticks: { color: '#7878a0' }, grid: { color: '#1e1e3a' } }
+        }
+      }
+    });
+  }
+
+  function buildTable(data) {
+    const tbody = document.getElementById('history-table');
+    const reversed = [...data].reverse();
+    tbody.innerHTML = reversed.map(d => {
+      const s = d.scores || {};
+      const mc = moodColor(d.overall_mood);
+      return `<tr>
+        <td>${d.date}</td>
+        <td><strong style="color:${scoreColor(d.composite)}">${(d.composite||0).toFixed(1)}</strong></td>
+        <td><span class="mood-pill" style="background:${mc}22;color:${mc};border:1px solid ${mc}55">${d.overall_mood||'—'}</span></td>
+        <td style="color:#aaa;font-size:.82rem">${d.primary_target||'—'}</td>
+        <td>${s['Aggression']||'—'}</td>
+        <td>${s['Erraticism']||'—'}</td>
+        <td>${s['Market Risk']||'—'}</td>
+        <td>${s['Geopolitical Tension']||'—'}</td>
+        <td>${s['Domestic Heat']||'—'}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  function scoreColor(v) {
+    if (v >= 8) return '#e74c3c';
+    if (v >= 6) return '#e67e22';
+    if (v >= 4) return '#f1c40f';
+    return '#2ecc71';
+  }
+
+  function buildDimToggles() {
+    const container = document.getElementById('dim-toggle');
+    DIMS.forEach((dim, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'dim-btn active';
+      btn.textContent = dim;
+      btn.style.borderColor = DIM_COLORS[i];
+      btn.style.background = DIM_COLORS[i] + '33';
+      btn.style.color = DIM_COLORS[i];
+      btn.addEventListener('click', () => {
+        if (ACTIVE_DIMS.has(dim)) {
+          ACTIVE_DIMS.delete(dim);
+          btn.classList.remove('active');
+          btn.style.background = 'transparent';
+          btn.style.color = '#7878a0';
+        } else {
+          ACTIVE_DIMS.add(dim);
+          btn.classList.add('active');
+          btn.style.background = DIM_COLORS[i] + '33';
+          btn.style.color = DIM_COLORS[i];
+        }
+        buildDimChart(historyData);
+      });
+      container.appendChild(btn);
+    });
+  }
+
+  async function load() {
+    try {
+      const res = await fetch('data/history.json?t=' + Date.now());
+      historyData = await res.json();
+      buildCompositeChart(historyData);
+      buildDimToggles();
+      buildDimChart(historyData);
+      buildTable(historyData);
+    } catch(e) {
+      document.querySelector('main').innerHTML += `<p style="color:#7878a0;text-align:center">History data not yet available.</p>`;
+    }
+  }
+
+  load();
+</script>
+</body>
+</html>
