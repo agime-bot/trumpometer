@@ -12,5 +12,19 @@
     "key_signal": "Trump is operating in a manic, victory-focused state while simultaneously escalating military tensions in Iran. His chaotic Truth Social posting combined with aggressive policy announcements suggests he's energized by perceived diplomatic wins but increasingly volatile in execution.",
     "overall_mood": "TRIUMPHANT",
     "composite": 7.8
+  },
+  {
+    "date": "2026-04-18",
+    "scores": {
+      "Aggression": 7,
+      "Erraticism": 6,
+      "Market Risk": 6,
+      "Geopolitical Tension": 8,
+      "Domestic Heat": 6
+    },
+    "primary_target": "Iran / Economic messaging to working class",
+    "key_signal": "Trump is simultaneously projecting strength through military threats and populist economic wins (no tax on tips, tariffs) while maintaining an energized, combative posture. His messaging blends nationalist swagger with tangible policy wins designed to solidify working-class support.",
+    "overall_mood": "TRIUMPHANT",
+    "composite": 6.6
   }
 ]
