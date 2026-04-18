@@ -20,11 +20,13 @@
       "Erraticism": 6,
       "Market Risk": 6,
       "Geopolitical Tension": 8,
-      "Domestic Heat": 6
+      "Domestic Heat": 5
     },
-    "primary_target": "Iran / Economic messaging to working class",
-    "key_signal": "Trump is simultaneously projecting strength through military threats and populist economic wins (no tax on tips, tariffs) while maintaining an energized, combative posture. His messaging blends nationalist swagger with tangible policy wins designed to solidify working-class support.",
+    "primary_target": "Iran nuclear negotiations & international adversaries",
+    "key_signal": "Trump is operating in victory/momentum mode, focused on economic wins (tax policy, manufacturing) while maintaining hardline posture on Iran and geopolitical rivals. The reduced posting volume and moderated caps suggest calculated messaging rather than chaotic reactivity.",
     "overall_mood": "TRIUMPHANT",
-    "composite": 6.6
+    "composite": 6.4,
+    "truth_post_count": 13,
+    "truth_caps_ratio": 0.127
   }
 ]
