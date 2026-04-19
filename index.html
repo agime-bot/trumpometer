@@ -99,6 +99,25 @@
     .dim-bar-fill { height: 100%; border-radius: 4px; transition: width .8s ease; }
     .dim-score { flex: 0 0 40px; text-align: right; font-weight: 700; font-size: .95rem; }
 
+    .truth-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 2rem;
+      display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center;
+    }
+    .truth-stat {
+      display: flex; flex-direction: column; align-items: center;
+      min-width: 100px;
+    }
+    .truth-stat-value { font-size: 1.8rem; font-weight: 900; line-height: 1; }
+    .truth-stat-label { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: .3rem; }
+    .caps-bar-wrap { flex: 1; min-width: 160px; }
+    .caps-bar-label { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: .4rem; display: flex; justify-content: space-between; }
+    .caps-bar-track { height: 10px; background: var(--border); border-radius: 5px; overflow: hidden; }
+    .caps-bar-fill { height: 100%; border-radius: 5px; transition: width .8s ease; }
+
     .signal-box {
       background: var(--surface);
       border-left: 3px solid var(--accent);
@@ -166,6 +185,22 @@
 
   <div class="dimensions" id="dimensions-list"></div>
 
+  <div class="truth-box" id="truth-box" style="display:none">
+    <div class="truth-stat">
+      <div class="truth-stat-value" id="truth-post-count">—</div>
+      <div class="truth-stat-label">Truth Posts Today</div>
+    </div>
+    <div class="caps-bar-wrap">
+      <div class="caps-bar-label">
+        <span>CAPS Ratio</span>
+        <span id="caps-pct">—</span>
+      </div>
+      <div class="caps-bar-track">
+        <div class="caps-bar-fill" id="caps-bar-fill" style="width:0%"></div>
+      </div>
+    </div>
+  </div>
+
   <div class="signal-box">
     <div class="signal-label">📡 Key Signal</div>
     <div id="key-signal">Loading analysis...</div>
@@ -221,6 +256,19 @@
       document.getElementById('target-text').textContent = d.data.primary_target;
       document.getElementById('key-signal').textContent = d.data.key_signal;
       document.getElementById('chart-img').src = 'data/latest.png?t=' + Date.now();
+
+      if (d.data.truth_post_count !== undefined) {
+        const postCount = d.data.truth_post_count;
+        const capsRatio = d.data.truth_caps_ratio || 0;
+        const capsPct = Math.round(capsRatio * 100);
+        document.getElementById('truth-post-count').textContent = postCount;
+        document.getElementById('caps-pct').textContent = capsPct + '%';
+        const capsColor = capsPct >= 40 ? '#e74c3c' : capsPct >= 20 ? '#e67e22' : capsPct >= 10 ? '#f1c40f' : '#2ecc71';
+        document.getElementById('caps-bar-fill').style.width = Math.min(capsPct * 2, 100) + '%';
+        document.getElementById('caps-bar-fill').style.background = capsColor;
+        document.getElementById('caps-pct').style.color = capsColor;
+        document.getElementById('truth-box').style.display = 'flex';
+      }
 
       const scores = d.data.scores;
       const list = document.getElementById('dimensions-list');

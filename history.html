@@ -95,6 +95,11 @@
     <canvas id="dimChart"></canvas>
   </div>
 
+  <div class="section-title">Truth Posts &amp; CAPS Ratio</div>
+  <div class="chart-card">
+    <canvas id="capsChart"></canvas>
+  </div>
+
   <div class="ad-slot"><!-- AdSense mid -->Advertisement</div>
 
   <div class="section-title">Daily Log</div>
@@ -111,6 +116,8 @@
           <th>Mkt</th>
           <th>Geo</th>
           <th>Dom</th>
+          <th>Posts</th>
+          <th>CAPS%</th>
         </tr>
       </thead>
       <tbody id="history-table"></tbody>
@@ -213,6 +220,8 @@
         <td>${s['Market Risk']||'—'}</td>
         <td>${s['Geopolitical Tension']||'—'}</td>
         <td>${s['Domestic Heat']||'—'}</td>
+        <td>${d.truth_post_count !== undefined ? d.truth_post_count : '—'}</td>
+        <td>${d.truth_caps_ratio !== undefined ? Math.round(d.truth_caps_ratio*100)+'%' : '—'}</td>
       </tr>`;
     }).join('');
   }
@@ -251,6 +260,51 @@
     });
   }
 
+  function buildCapsChart(data) {
+    const filtered = data.filter(d => d.truth_post_count !== undefined);
+    if (!filtered.length) return;
+    const labels = filtered.map(d => d.date.slice(5));
+    const capsPcts = filtered.map(d => Math.round((d.truth_caps_ratio||0)*100));
+    const postCounts = filtered.map(d => d.truth_post_count||0);
+    const ctx = document.getElementById('capsChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'CAPS %',
+            data: capsPcts,
+            backgroundColor: capsPcts.map(v => v >= 40 ? '#e74c3c99' : v >= 20 ? '#e67e2299' : v >= 10 ? '#f1c40f99' : '#2ecc7199'),
+            borderColor: capsPcts.map(v => v >= 40 ? '#e74c3c' : v >= 20 ? '#e67e22' : v >= 10 ? '#f1c40f' : '#2ecc71'),
+            borderWidth: 1,
+            yAxisID: 'yCaps',
+          },
+          {
+            label: 'Post Count',
+            data: postCounts,
+            type: 'line',
+            borderColor: '#00d4ff',
+            backgroundColor: 'rgba(0,212,255,0.08)',
+            tension: 0.3,
+            fill: false,
+            pointRadius: 4,
+            yAxisID: 'yPosts',
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { labels: { color: '#7878a0', boxWidth: 12 } } },
+        scales: {
+          x: { ticks: { color: '#7878a0' }, grid: { color: '#1e1e3a' } },
+          yCaps: { position: 'left', min: 0, max: 100, ticks: { color: '#7878a0', callback: v => v+'%' }, grid: { color: '#1e1e3a' }, title: { display: true, text: 'CAPS %', color: '#7878a0' } },
+          yPosts: { position: 'right', min: 0, ticks: { color: '#00d4ff' }, grid: { drawOnChartArea: false }, title: { display: true, text: 'Posts', color: '#00d4ff' } }
+        }
+      }
+    });
+  }
+
   async function load() {
     try {
       const res = await fetch('data/history.json?t=' + Date.now());
@@ -258,6 +312,7 @@
       buildCompositeChart(historyData);
       buildDimToggles();
       buildDimChart(historyData);
+      buildCapsChart(historyData);
       buildTable(historyData);
     } catch(e) {
       document.querySelector('main').innerHTML += `<p style="color:#7878a0;text-align:center">History data not yet available.</p>`;
