@@ -28,5 +28,21 @@
     "composite": 6.4,
     "truth_post_count": 13,
     "truth_caps_ratio": 0.127
+  },
+  {
+    "date": "2026-04-19",
+    "scores": {
+      "Aggression": 9,
+      "Erraticism": 6,
+      "Market Risk": 7,
+      "Geopolitical Tension": 9,
+      "Domestic Heat": 5
+    },
+    "primary_target": "Iran nuclear/military capability",
+    "key_signal": "Trump is escalating military threats against Iran while simultaneously claiming negotiating superiority through economic blockade pressure. He's signaling willingness to conduct large-scale strikes if Iran doesn't capitulate to his 'deal' terms.",
+    "overall_mood": "AGGRESSIVE",
+    "composite": 7.2,
+    "truth_post_count": 3,
+    "truth_caps_ratio": 0.128
   }
 ]
