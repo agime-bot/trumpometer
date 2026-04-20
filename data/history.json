@@ -44,5 +44,21 @@
     "composite": 7.2,
     "truth_post_count": 3,
     "truth_caps_ratio": 0.128
+  },
+  {
+    "date": "2026-04-20",
+    "scores": {
+      "Aggression": 6,
+      "Erraticism": 4,
+      "Market Risk": 5,
+      "Geopolitical Tension": 7,
+      "Domestic Heat": 5
+    },
+    "primary_target": "Iran / international adversaries",
+    "key_signal": "Trump is operating from a position of perceived strength and victory, with controlled messaging focused on economic wins and military posturing rather than domestic chaos. His unusually low posting activity (2 vs. 18/day baseline) suggests either deliberate message discipline or scheduled activities.",
+    "overall_mood": "TRIUMPHANT",
+    "composite": 5.4,
+    "truth_post_count": 2,
+    "truth_caps_ratio": 0.189
   }
 ]
