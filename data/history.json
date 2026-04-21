@@ -60,5 +60,21 @@
     "composite": 5.4,
     "truth_post_count": 2,
     "truth_caps_ratio": 0.189
+  },
+  {
+    "date": "2026-04-21",
+    "scores": {
+      "Aggression": 8,
+      "Erraticism": 7,
+      "Market Risk": 6,
+      "Geopolitical Tension": 9,
+      "Domestic Heat": 7
+    },
+    "primary_target": "Iran and critical media",
+    "key_signal": "Trump is in aggressive war-posture mode with Iran ceasefire ending Wednesday, while simultaneously defending his record domestically and attacking media credibility. He's energized by military action and dismissive of critics.",
+    "overall_mood": "AGGRESSIVE",
+    "composite": 7.4,
+    "truth_post_count": 6,
+    "truth_caps_ratio": 0.084
   }
 ]
