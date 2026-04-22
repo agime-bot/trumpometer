@@ -76,5 +76,21 @@
     "composite": 7.4,
     "truth_post_count": 6,
     "truth_caps_ratio": 0.084
+  },
+  {
+    "date": "2026-04-22",
+    "scores": {
+      "Aggression": 8,
+      "Erraticism": 7,
+      "Market Risk": 7,
+      "Geopolitical Tension": 9,
+      "Domestic Heat": 6
+    },
+    "primary_target": "Iran's financial/military collapse and ceasefire leverage",
+    "key_signal": "Trump is projecting confidence in economic coercion against Iran while employing detailed tactical messaging about blockade strategy. His focus on Iran's financial distress and internal military dissent suggests he believes time/economic pressure favors his negotiating position, not theirs.",
+    "overall_mood": "AGGRESSIVE",
+    "composite": 7.4,
+    "truth_post_count": 8,
+    "truth_caps_ratio": 0.094
   }
 ]
