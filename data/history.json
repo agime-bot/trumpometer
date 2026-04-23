@@ -92,5 +92,21 @@
     "composite": 7.4,
     "truth_post_count": 8,
     "truth_caps_ratio": 0.094
+  },
+  {
+    "date": "2026-04-23",
+    "scores": {
+      "Aggression": 7,
+      "Erraticism": 6,
+      "Market Risk": 5,
+      "Geopolitical Tension": 8,
+      "Domestic Heat": 6
+    },
+    "primary_target": "Iran + DC establishment figures",
+    "key_signal": "Trump is simultaneously escalating Iran tensions (hints at strikes, maintains blockade) while claiming diplomatic fairness, then extending ceasefire\u2014suggesting either tactical flexibility or reactive course-correction under pressure from world leaders.",
+    "overall_mood": "AGGRESSIVE",
+    "composite": 6.4,
+    "truth_post_count": 6,
+    "truth_caps_ratio": 0.212
   }
 ]
