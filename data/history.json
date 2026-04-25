@@ -124,5 +124,21 @@
     "composite": 4.4,
     "truth_post_count": 5,
     "truth_caps_ratio": 0.108
+  },
+  {
+    "date": "2026-04-25",
+    "scores": {
+      "Aggression": 5,
+      "Erraticism": 4,
+      "Market Risk": 4,
+      "Geopolitical Tension": 4,
+      "Domestic Heat": 5
+    },
+    "primary_target": "Unknown (heuristic fallback)",
+    "key_signal": "API unavailable \u2014 heuristic scoring applied.",
+    "overall_mood": "UNKNOWN",
+    "composite": 4.4,
+    "truth_post_count": 0,
+    "truth_caps_ratio": 0.0
   }
 ]
